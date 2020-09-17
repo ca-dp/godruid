@@ -9,10 +9,10 @@ import (
 )
 
 const (
-	DefaultQueryEndPoint = "/druid/v2"
+	DefaultSupervisorEndPoint = "/druid/indexer/v1/supervisor"
 )
 
-type Client struct {
+type OverlordClient struct {
 	Url      string
 	EndPoint string
 
@@ -22,30 +22,29 @@ type Client struct {
 	HttpClient   *http.Client
 }
 
-func (c *Client) Query(query Query, authToken string) (err error) {
-	query.setup()
+func (c *OverlordClient) CreateOrUpdateSupervisor(spec SupervisorSpec, authToken string) (err error) {
+	if c.EndPoint == "" {
+		c.EndPoint = DefaultSupervisorEndPoint
+	}
 	var reqJson []byte
 	if c.Debug {
-		reqJson, err = json.MarshalIndent(query, "", "  ")
+		reqJson, err = json.MarshalIndent(spec, "", "  ")
 	} else {
-		reqJson, err = json.Marshal(query)
+		reqJson, err = json.Marshal(spec)
 	}
 	if err != nil {
 		return
 	}
 
-	result, err := c.QueryRaw(reqJson, authToken)
+	result, err := c.Post(reqJson, authToken)
 	if err != nil {
 		return
 	}
 
-	return query.onResponse(result)
+	return spec.onResponse(result)
 }
 
-func (c *Client) QueryRaw(req []byte, authToken string) (result []byte, err error) {
-	if c.EndPoint == "" {
-		c.EndPoint = DefaultQueryEndPoint
-	}
+func (c *OverlordClient) Post(req []byte, authToken string) (result []byte, err error) {
 	endPoint := c.EndPoint
 	if c.Debug {
 		endPoint += "?pretty"
