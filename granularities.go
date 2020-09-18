@@ -29,6 +29,14 @@ type granPeriod struct {
 	Origin   string `json:"origin,omitempty"`
 }
 
+type granUniform struct {
+	Type string `json:"type"`
+
+	SegmentGranularity string `json:"segmentGranularity"`
+	QueryGranularity   string `json:"queryGranularity"`
+	Rollup             bool   `json:"rollup"`
+}
+
 func GranPeriod(period string, timeZone string, origin string) granPeriod {
 	return granPeriod{
 		Type:     "period",
@@ -43,6 +51,16 @@ func GranDuration(duration string, origin string) granDuration {
 		Type:     "duration",
 		Duration: duration,
 		Origin:   origin,
+	}
+
+}
+
+func GranUniform(segmentGranularity, queryGranularity string, rollup bool) granUniform {
+	return granUniform{
+		Type:               "uniform",
+		SegmentGranularity: segmentGranularity,
+		QueryGranularity:   queryGranularity,
+		Rollup:             rollup,
 	}
 
 }

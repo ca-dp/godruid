@@ -130,3 +130,43 @@ var (
 	SearchSortLexicographic = &SearchSort{Type: "lexicographic"}
 	SearchSortStrlen        = &SearchSort{Type: "strlen"}
 )
+
+// ---------------------------------
+// MetricsSpec
+// ---------------------------------
+
+type MetricsSpec struct {
+	Type      string `json:"type"`
+	Name      string `json:"name"`
+	FieldName string `json:"fieldName,omitempty"`
+	InputType string `json:"inputType,omitempty"`
+	Estimator string `json:"estimator,omitempty"`
+}
+
+// ---------------------------------
+// Parser
+// ---------------------------------
+
+type Parser struct {
+	Type      string     `json:"type"`
+	ParseSpec *ParseSpec `json:"parseSpec"`
+}
+
+// ---------------------------------
+// ParseSpec
+// ---------------------------------
+
+type ParseSpec struct {
+	Format        string         `json:"format"`
+	TimestampSpec *TimestampSpec `json:"timestampSpec"`
+	DimensionSpec DimSpec        `json:"dimensionsSpec"`
+}
+
+// ---------------------------------
+// TimestampSpec
+// ---------------------------------
+
+type TimestampSpec struct {
+	Column string `json:"column"`
+	Format string `json:"format"`
+}

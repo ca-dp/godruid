@@ -2,6 +2,8 @@ package godruid
 
 type DimSpec interface{}
 
+type EmptyDimension struct{}
+
 type Dimension struct {
 	Type         string           `json:"type"`
 	Dimension    string           `json:"dimension"`
