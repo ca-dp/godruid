@@ -3,13 +3,17 @@ package godruid
 type TuningConfig interface{}
 
 type tuningConfigKafka struct {
-	Type             string `json:"type"`
-	MaxRowPerSegment int    `json:"maxRowsPerSegment"`
+	Type              string `json:"type"`
+	MaxRowsPerSegment int    `json:"maxRowsPerSegment"`
+	MaxRowsInMemory   int    `json:"maxRowsInMemory,omitempty"`
+	MaxBytesInMemory  int    `json:"maxBytesInMemory,omitempty"`
 }
 
-func TuningConfigKafka(maxRowPerSegment int) TuningConfig {
+func TuningConfigKafka(maxRowsPerSegment, maxRowsInMemory, maxBytesInMemory int) TuningConfig {
 	return &tuningConfigKafka{
-		Type:             "kafka",
-		MaxRowPerSegment: maxRowPerSegment,
+		Type:              "kafka",
+		MaxRowsPerSegment: maxRowsPerSegment,
+		MaxRowsInMemory:   maxRowsInMemory,
+		MaxBytesInMemory:  maxBytesInMemory,
 	}
 }
