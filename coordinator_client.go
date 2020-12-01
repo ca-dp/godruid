@@ -4,16 +4,21 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 )
 
 const (
-	DefaultSupervisorEndPoint = "/druid/indexer/v1/supervisor"
+	DefaultRetentionRulesEndPoint = "/druid/coordinator/v1/rules/%s"
 )
 
-type OverlordClient struct {
+var (
+	ErrDatasourceEmpty = errors.New("coordinatorClient: datasource is empty")
+)
+
+type CoordinatorClient struct {
 	Url      string
 	EndPoint string
 
@@ -23,29 +28,29 @@ type OverlordClient struct {
 	HttpClient   *http.Client
 }
 
-func (c *OverlordClient) CreateOrUpdateSupervisor(ctx context.Context, spec SupervisorSpec, authToken string) (err error) {
+func (c *CoordinatorClient) CreateOrUpdateRetentionRule(ctx context.Context, datasource string, rules RetentionRulesSpec, authToken string) (err error) {
 	if c.EndPoint == "" {
-		c.EndPoint = DefaultSupervisorEndPoint
+		if datasource == "" {
+			return ErrDatasourceEmpty
+		}
+		c.EndPoint = fmt.Sprintf(DefaultRetentionRulesEndPoint, datasource)
 	}
+	c.EndPoint = "/druid/coordinator/v1/rules/wikiticker-2015-09-12-sampled"
 	var reqJson []byte
 	if c.Debug {
-		reqJson, err = json.MarshalIndent(spec, "", "  ")
+		reqJson, err = json.MarshalIndent(rules.(*RetentionRules).rules, "", "  ")
 	} else {
-		reqJson, err = json.Marshal(spec)
+		reqJson, err = json.Marshal(rules.(*RetentionRules).rules)
 	}
 	if err != nil {
 		return
 	}
 
-	result, err := c.Post(ctx, reqJson, authToken)
-	if err != nil {
-		return
-	}
-
-	return spec.onResponse(result)
+	_, err = c.Post(ctx, reqJson, authToken)
+	return err
 }
 
-func (c *OverlordClient) Post(ctx context.Context, req []byte, authToken string) (result []byte, err error) {
+func (c *CoordinatorClient) Post(ctx context.Context, req []byte, authToken string) (result []byte, err error) {
 	endPoint := c.EndPoint
 	if c.Debug {
 		endPoint += "?pretty"
@@ -77,7 +82,6 @@ func (c *OverlordClient) Post(ctx context.Context, req []byte, authToken string)
 	if err != nil {
 		return nil, err
 	}
-
 	result, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return
@@ -85,10 +89,8 @@ func (c *OverlordClient) Post(ctx context.Context, req []byte, authToken string)
 	if c.Debug {
 		c.LastResponse = string(result)
 	}
-
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("%s: %s", resp.Status, string(result))
 	}
-
 	return
 }
