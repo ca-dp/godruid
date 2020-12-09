@@ -2,6 +2,7 @@ package godruid
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -22,7 +23,7 @@ type OverlordClient struct {
 	HttpClient   *http.Client
 }
 
-func (c *OverlordClient) CreateOrUpdateSupervisor(spec SupervisorSpec, authToken string) (err error) {
+func (c *OverlordClient) CreateOrUpdateSupervisor(ctx context.Context, spec SupervisorSpec, authToken string) (err error) {
 	if c.EndPoint == "" {
 		c.EndPoint = DefaultSupervisorEndPoint
 	}
@@ -36,7 +37,7 @@ func (c *OverlordClient) CreateOrUpdateSupervisor(spec SupervisorSpec, authToken
 		return
 	}
 
-	result, err := c.Post(reqJson, authToken)
+	result, err := c.Post(ctx, reqJson, authToken)
 	if err != nil {
 		return
 	}
@@ -44,7 +45,7 @@ func (c *OverlordClient) CreateOrUpdateSupervisor(spec SupervisorSpec, authToken
 	return spec.onResponse(result)
 }
 
-func (c *OverlordClient) Post(req []byte, authToken string) (result []byte, err error) {
+func (c *OverlordClient) Post(ctx context.Context, req []byte, authToken string) (result []byte, err error) {
 	endPoint := c.EndPoint
 	if c.Debug {
 		endPoint += "?pretty"
@@ -66,8 +67,7 @@ func (c *OverlordClient) Post(req []byte, authToken string) (result []byte, err 
 		}
 		request.AddCookie(cookie)
 	}
-
-	resp, err := c.HttpClient.Do(request)
+	resp, err := c.HttpClient.Do(request.WithContext(ctx))
 	defer func() {
 		if resp != nil && resp.Body != nil {
 			resp.Body.Close()

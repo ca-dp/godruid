@@ -1,6 +1,7 @@
 package godruid
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"testing"
@@ -8,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateOrUpdateSupervi(t *testing.T) {
+func TestCreateOrUpdateSupervisor(t *testing.T) {
 	t.Parallel()
 	patterns := map[string]struct {
 		input    *SupervisorKafka
@@ -41,7 +42,7 @@ func TestCreateOrUpdateSupervi(t *testing.T) {
 				HttpClient: &http.Client{},
 				Debug:      true,
 			}
-			err := client.CreateOrUpdateSupervisor(p.input, "")
+			err := client.CreateOrUpdateSupervisor(context.Background(), p.input, "")
 			fmt.Printf("requst: %s", client.LastRequest)
 			assert.NoError(t, err)
 			fmt.Printf("response: %s", client.LastResponse)
