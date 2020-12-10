@@ -19,7 +19,7 @@ type RetentionRule struct {
 }
 
 type RetentionRules struct {
-	rules               []*RetentionRule
+	Rules               []*RetentionRule
 	RetentionRuleResult *RetentionRulesResult `json:"-"`
 	RawJSON             []byte                `json:"-"`
 }

@@ -38,9 +38,9 @@ func (c *CoordinatorClient) CreateOrUpdateRetentionRule(ctx context.Context, dat
 	c.EndPoint = "/druid/coordinator/v1/rules/wikiticker-2015-09-12-sampled"
 	var reqJson []byte
 	if c.Debug {
-		reqJson, err = json.MarshalIndent(rules.(*RetentionRules).rules, "", "  ")
+		reqJson, err = json.MarshalIndent(rules.(*RetentionRules).Rules, "", "  ")
 	} else {
-		reqJson, err = json.Marshal(rules.(*RetentionRules).rules)
+		reqJson, err = json.Marshal(rules.(*RetentionRules).Rules)
 	}
 	if err != nil {
 		return
