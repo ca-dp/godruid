@@ -17,7 +17,7 @@ func TestCreateOrUpdateRetentionRule(t *testing.T) {
 	}{
 		"success": {
 			rules: &RetentionRules{
-				rules: []*RetentionRule{
+				Rules: []*RetentionRule{
 					{Type: "dropBeforeByPeriod", Period: "P2M"},
 					{Type: "loadForever"},
 				},
