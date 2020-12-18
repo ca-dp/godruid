@@ -23,6 +23,12 @@ type DimExtractionFn struct {
 	AsMillis    bool         `json:"asMillis,omitempty"`
 }
 
+type DimFiltered struct {
+	Type     string  `json:"type"`
+	Delegate DimSpec `json:"delegate"`
+	Pattern  string  `json:"pattern,omitempty"`
+}
+
 type TimeExtractionDimensionSpec struct {
 	Type               string       `json:"type"`
 	Dimension          string       `json:"dimension"`
@@ -83,5 +89,13 @@ func DimExFnJavascript(function string) *DimExtractionFn {
 	return &DimExtractionFn{
 		Type:     "javascript",
 		Function: function,
+	}
+}
+
+func DimFilteredRegex(delegate DimSpec, pattern string) *DimFiltered {
+	return &DimFiltered{
+		Type:     "regexFiltered",
+		Delegate: delegate,
+		Pattern:  pattern,
 	}
 }
