@@ -30,6 +30,12 @@ type TimeExtractionDimensionSpec struct {
 	ExtractionFunction ExtractionFn `json:"extractionFn"`
 }
 
+type DimFiltered struct {
+	Type     string   `json:"type"`
+	Delegate *DimSpec `json:"delegate"`
+	Pattern  string   `json:"pattern,omitempty"`
+}
+
 func DimDefault(dimension, outputName string) DimSpec {
 	return &Dimension{
 		Type:       "default",
@@ -83,5 +89,13 @@ func DimExFnJavascript(function string) *DimExtractionFn {
 	return &DimExtractionFn{
 		Type:     "javascript",
 		Function: function,
+	}
+}
+
+func DimFilteredRegex(delegate *DimSpec, pattern string) *DimFiltered {
+	return &DimFiltered{
+		Type:     "regexFiltered",
+		Delegate: delegate,
+		Pattern:  pattern,
 	}
 }
