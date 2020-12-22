@@ -35,7 +35,6 @@ func (c *CoordinatorClient) CreateOrUpdateRetentionRule(ctx context.Context, dat
 		}
 		c.EndPoint = fmt.Sprintf(DefaultRetentionRulesEndPoint, datasource)
 	}
-	c.EndPoint = "/druid/coordinator/v1/rules/wikiticker-2015-09-12-sampled"
 	var reqJson []byte
 	if c.Debug {
 		reqJson, err = json.MarshalIndent(rules.(*RetentionRules).Rules, "", "  ")
