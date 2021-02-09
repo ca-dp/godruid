@@ -41,7 +41,7 @@ func GranPeriod(period string, timeZone string, origin string) granPeriod {
 	return granPeriod{
 		Type:     "period",
 		Period:   period,
-		TimeZone: "UTC",
+		TimeZone: timeZone,
 		Origin:   origin,
 	}
 }
