@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	DefaultRetentionRulesEndPoint = "/druid/coordinator/v1/rules/%s"
+	DefaultRetentionRulesEndPoint   = "/druid/coordinator/v1/rules/%s"
+	DefaultCompactionConfigEndPoint = "/druid/coordinator/v1/config/compaction"
 )
 
 var (
@@ -40,6 +41,24 @@ func (c *CoordinatorClient) CreateOrUpdateRetentionRule(ctx context.Context, dat
 		reqJson, err = json.MarshalIndent(rules.(*RetentionRules).Rules, "", "  ")
 	} else {
 		reqJson, err = json.Marshal(rules.(*RetentionRules).Rules)
+	}
+	if err != nil {
+		return
+	}
+
+	_, err = c.Post(ctx, reqJson, authToken)
+	return err
+}
+
+func (c *CoordinatorClient) CreateOrUpdateCompactionConfig(ctx context.Context, compactionConfig *CompactionConfig, authToken string) (err error) {
+	if c.EndPoint == "" {
+		c.EndPoint = DefaultCompactionConfigEndPoint
+	}
+	var reqJson []byte
+	if c.Debug {
+		reqJson, err = json.MarshalIndent(compactionConfig, "", "  ")
+	} else {
+		reqJson, err = json.Marshal(compactionConfig)
 	}
 	if err != nil {
 		return

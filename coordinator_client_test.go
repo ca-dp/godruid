@@ -40,3 +40,32 @@ func TestCreateOrUpdateRetentionRule(t *testing.T) {
 		})
 	}
 }
+
+func TestCreateOrUpdateCompactionConfig(t *testing.T) {
+	t.Parallel()
+	patterns := map[string]struct {
+		cc       *CompactionConfig
+		expected string
+	}{
+		"success": {
+			cc: &CompactionConfig{
+				DataSource: "wikiticker-2015-09-12-sampled",
+			},
+		},
+	}
+	for msg, p := range patterns {
+		t.Run(msg, func(t *testing.T) {
+			client := CoordinatorClient{
+				Url:        "http://localhost:8081",
+				HttpClient: &http.Client{},
+				Debug:      true,
+			}
+			err := client.CreateOrUpdateCompactionConfig(context.Background(), p.cc, "")
+			fmt.Printf("requst: %s", client.LastRequest)
+			assert.NoError(t, err)
+			fmt.Println("err", err)
+			fmt.Printf("response: %s", client.LastResponse)
+			fmt.Printf("CompactionConfig: %v", p.cc.CompactionConfigResult)
+		})
+	}
+}
