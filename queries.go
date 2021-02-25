@@ -41,7 +41,7 @@ const (
 
 type QueryGroupBy struct {
 	QueryType        QueryType              `json:"queryType"`
-	DataSource       string                 `json:"dataSource"`
+	DataSource       *DataSource            `json:"dataSource"`
 	Dimensions       []DimSpec              `json:"dimensions"`
 	Granularity      Granlarity             `json:"granularity"`
 	LimitSpec        *Limit                 `json:"limitSpec,omitempty"`
@@ -81,7 +81,7 @@ func (q *QueryGroupBy) onResponse(content []byte) error {
 
 type QuerySearch struct {
 	QueryType        QueryType              `json:"queryType"`
-	DataSource       string                 `json:"dataSource"`
+	DataSource       *DataSource            `json:"dataSource"`
 	Granularity      Granlarity             `json:"granularity"`
 	Filter           *Filter                `json:"filter,omitempty"`
 	Intervals        Intervals              `json:"intervals"`
@@ -123,7 +123,7 @@ func (q *QuerySearch) onResponse(content []byte) error {
 
 type QuerySegmentMetadata struct {
 	QueryType      QueryType              `json:"queryType"`
-	DataSource     string                 `json:"dataSource"`
+	DataSource     *DataSource            `json:"dataSource"`
 	Intervals      Intervals              `json:"intervals"`
 	ToInclude      *ToInclude             `json:"toInclude,omitempty"`
 	Merge          interface{}            `json:"merge,omitempty"`
@@ -164,7 +164,7 @@ func (q *QuerySegmentMetadata) onResponse(content []byte) error {
 
 type QueryTimeBoundary struct {
 	QueryType  QueryType              `json:"queryType"`
-	DataSource string                 `json:"dataSource"`
+	DataSource *DataSource            `json:"dataSource"`
 	Bound      string                 `json:"bound,omitempty"`
 	Context    map[string]interface{} `json:"context,omitempty"`
 
@@ -179,7 +179,7 @@ type TimeBoundaryItem struct {
 
 type TimeBoundary struct {
 	MinTime string `json:"minTime"`
-	MaxTime string `json:"minTime"`
+	MaxTime string `json:"maxTime"`
 }
 
 func (q *QueryTimeBoundary) setup()             { q.QueryType = TIMEBOUNDARY }
@@ -201,7 +201,7 @@ func (q *QueryTimeBoundary) onResponse(content []byte) error {
 
 type QueryTimeseries struct {
 	QueryType        QueryType              `json:"queryType"`
-	DataSource       string                 `json:"dataSource"`
+	DataSource       *DataSource            `json:"dataSource"`
 	Granularity      Granlarity             `json:"granularity"`
 	Filter           *Filter                `json:"filter,omitempty"`
 	Aggregations     []Aggregation          `json:"aggregations"`
@@ -237,7 +237,7 @@ func (q *QueryTimeseries) onResponse(content []byte) error {
 
 type QueryTopN struct {
 	QueryType        QueryType              `json:"queryType"`
-	DataSource       string                 `json:"dataSource"`
+	DataSource       *DataSource            `json:"dataSource"`
 	Granularity      Granlarity             `json:"granularity"`
 	Dimension        DimSpec                `json:"dimension"`
 	Threshold        int                    `json:"threshold"`
@@ -276,7 +276,7 @@ func (q *QueryTopN) onResponse(content []byte) error {
 
 type QuerySelect struct {
 	QueryType      QueryType              `json:"queryType"`
-	DataSource     string                 `json:"dataSource"`
+	DataSource     *DataSource            `json:"dataSource"`
 	Intervals      Intervals              `json:"intervals"`
 	Filter         *Filter                `json:"filter,omitempty"`
 	Dimensions     []DimSpec              `json:"dimensions"`
@@ -332,7 +332,7 @@ func (q *QuerySelect) onResponse(content []byte) error {
 
 type QueryScan struct {
 	QueryType      QueryType              `json:"queryType"`
-	DataSource     string                 `json:"dataSource"`
+	DataSource     *DataSource            `json:"dataSource"`
 	Limit          int                    `json:"limit,omitempty"`
 	Columns        []string               `json:"columns,omitempty"`
 	ResultFormat   string                 `json:"resultFormat,omitempty"`
