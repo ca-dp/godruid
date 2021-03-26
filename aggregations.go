@@ -100,6 +100,14 @@ func AggLongMax(name, fieldName string) *Aggregation {
 	}
 }
 
+func AggDoubleMean(name, fieldName string) *Aggregation {
+	return &Aggregation{
+		Type:      "doubleMean",
+		Name:      name,
+		FieldName: fieldName,
+	}
+}
+
 func AggFiltered(filter *Filter, aggregator *Aggregation) Aggregation {
 	return Aggregation{
 		Type:       "filtered",
@@ -167,4 +175,13 @@ func ExtAggQuantile(name string, fieldName string, k int32) *Aggregation {
 	}
 
 	return &retAgg
+}
+
+// druid-datasketches extension
+func ExtAggThetaSketch(name string, fieldName string) *Aggregation {
+	return Aggregation{
+		Type:      "thetaSketch",
+		Name:      name,
+		FieldName: fieldName,
+	}
 }
