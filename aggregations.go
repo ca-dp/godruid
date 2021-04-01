@@ -179,7 +179,7 @@ func ExtAggQuantile(name string, fieldName string, k int32) *Aggregation {
 
 // druid-datasketches extension
 func ExtAggThetaSketch(name string, fieldName string) *Aggregation {
-	return Aggregation{
+	return &Aggregation{
 		Type:      "thetaSketch",
 		Name:      name,
 		FieldName: fieldName,
