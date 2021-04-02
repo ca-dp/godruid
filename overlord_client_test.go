@@ -18,7 +18,7 @@ func TestCreateOrUpdateSupervisor(t *testing.T) {
 		"success": {
 			input: &SupervisorKafka{
 				Type:         "kafka",
-				IOConfig:     IOConfigKafka("test-topic", "PT24H", "localhost:9092", "SCRAM-SHA-512", "SASL_PLAINTEXT", "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"fee\" password=\"foo\";"),
+				IOConfig:     IOConfigKafka("test-topic", "PT24H", "PT24H", "localhost:9092", "SCRAM-SHA-512", "SASL_PLAINTEXT", "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"fee\" password=\"foo\";"),
 				TuningConfig: TuningConfigKafka(1000000),
 				DataSchema: &DataSchema{
 					Datasource:      "test-datasource",
